@@ -22,6 +22,7 @@ from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 
 from tasks.views import TaskViewSet
+from users.views import UserViewSet
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -38,6 +39,7 @@ schema_view = get_schema_view(
 
 router = DefaultRouter()
 router.register('tasks', TaskViewSet, basename='tasks')
+router.register('users', UserViewSet, basename='users')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
