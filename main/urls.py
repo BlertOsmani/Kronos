@@ -20,15 +20,16 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt import views as jwt_views
 
 from tasks.views import TaskViewSet
 from users.views import UserViewSet
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Inventory management system",
+        title="Kronos",
         default_version='v1',
-        description="API documentation for IMS",
+        description="A task management system",
         terms_of_service = "https://www.google.com/policies/terms/",
         contact = openapi.Contact(email="your_email@example.com"),
         license = openapi.License(name="MIT License"),
@@ -41,9 +42,16 @@ router = DefaultRouter()
 router.register('tasks', TaskViewSet, basename='tasks')
 router.register('users', UserViewSet, basename='users')
 
+api_urlpatterns = [
+    path('auth/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('auth/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/token/blacklist/', jwt_views.TokenBlacklistView.as_view(), name='token_invalidate'),
+    path('', include(router.urls))
+]
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
+    path('api/', include(api_urlpatterns)),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
