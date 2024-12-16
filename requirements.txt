@@ -9,3 +9,4 @@ psycopg2-binary
 django-cors-headers
 pytest-django
 pytest
+djangorestframework-simplejwt
