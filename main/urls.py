@@ -20,10 +20,10 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
-from rest_framework_simplejwt import views as jwt_views
+from rest_framework_simplejwt.views import TokenBlacklistView, TokenRefreshView
 
 from tasks.views import TaskViewSet
-from users.views import UserViewSet
+from users.views import UserViewSet, LogInView, RegisterViewSet, ChangePasswordView
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -41,11 +41,13 @@ schema_view = get_schema_view(
 router = DefaultRouter()
 router.register('tasks', TaskViewSet, basename='tasks')
 router.register('users', UserViewSet, basename='users')
+router.register('register', RegisterViewSet, basename='register')
 
 api_urlpatterns = [
-    path('auth/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('auth/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('auth/token/blacklist/', jwt_views.TokenBlacklistView.as_view(), name='token_invalidate'),
+    path('auth/token/', LogInView.as_view(), name='token_obtain_pair'),
+    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/token/blacklist/', TokenBlacklistView.as_view(), name="token_blacklist"),
+    path('users/change-password/', ChangePasswordView.as_view(), name="change_password"),
     path('', include(router.urls))
 ]
 
