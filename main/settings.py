@@ -105,9 +105,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'kronos',
         'USER': 'postgres',
-        'PASSWORD': 'b13rt-Osmani',
-        'HOST': 'localhost',
-        'PORT': '5433',
+        'PASSWORD': '',
+        'HOST': 'host.docker.internal',
+        'PORT': '5432',
     }
 }
 
